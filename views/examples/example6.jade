@@ -1,0 +1,48 @@
+extends ../layout
+block scripts
+    script(src="/javascripts/nodeleak.js")
+block content
+    h1 #{title}: Leaking DOM nodes
+    p If the compiler can use inner classes, your code will execute MUCH faster and will use MUCH LESS memory.
+    ol
+        li Open Timeline tab.
+        li Start recording activty.
+        li Repeat the next steps and watch the Timeline
+            ol
+                li Create some nodes
+                li GC
+    p
+        button(onclick="createNodes()") Create nodes (some of them leaked)
+
+    hr
+    pre.
+        'use strict';
+
+        var leakedNodes = [];
+
+        function createNode(text) {
+            var div = document.createElement("div"),
+                innerDiv = document.createElement("div");
+            innerDiv.appendChild(document.createTextNode(text + " - "+ new Date().toTimeString()));
+            div.appendChild(innerDiv);
+            return div;
+        }
+
+        function createLeakedNodes() {
+            var i;
+            for (i = 0; i < 20; i++) {
+                leakedNodes.push(createNode("Leaked:" + i));
+            }
+        }
+
+        function createGCNodes() {
+            var i;
+            for (i = 0; i < 20; i++) {
+                createNode("Collected:" + i);
+            }
+        }
+
+        function createNodes() {
+            createLeakedNodes();
+            createGCNodes();
+        }

@@ -1,0 +1,73 @@
+extends ../layout
+block scripts
+    script(src="/javascripts/nodeleak2.js")
+block content
+    h1 #{title}: DOM leaks bigger than expected
+    ol
+        li Start memory profiling. Watch node count.
+        li Create a subtree of dom nodes and save a reference to a leaf and subtree route
+        li Detach tree
+        li Watch the detached node count
+        li Remove tree reference
+        li Watch the detached node count
+        li Remove leaf reference
+        li Watch the detached node count
+    p
+        button(onclick="createTree()") Create tree
+    p
+        button(onclick="detachTree()") Detach tree
+    p
+        button(onclick="removeTreeReference()") Remove tree reference
+    p
+        button(onclick="removeLeafReference()") Remove leaf reference
+
+    hr
+    pre.
+        'use strict';
+
+        var leakedNodes = [], parentDiv, leaf, counter = 0;
+
+        function createLeaf() {
+            counter++;
+            var div = document.createElement("div");
+            div.appendChild(document.createTextNode("Leaf  " + counter));
+            div.someText = (new Array(1E6).join("x"));
+            return div;
+        }
+
+        function createBranch(number) {
+            var div = document.createElement("div");
+            createNodesAndReturnLastLeaf(div, number - 1);
+            return div;
+        }
+
+        function createNodesAndReturnLastLeaf(parentDiv, number) {
+            var i, lastLeaf;
+            for (i = 0; i < number; i++) {
+                parentDiv.appendChild(createBranch(number));
+            }
+            for (i = 0; i < number; i++) {
+                parentDiv.appendChild(lastLeaf = createLeaf(number, i));
+            }
+            return lastLeaf;
+        }
+
+
+
+        function createTree() {
+            parentDiv = document.createElement("div");
+            leaf = createNodesAndReturnLastLeaf(parentDiv, 4);
+            document.body.appendChild(parentDiv);
+        }
+
+        function detachTree() {
+            document.body.removeChild(parentDiv);
+        }
+
+        function removeTreeReference() {
+            parentDiv = null;
+        }
+
+        function removeLeafReference() {
+            leaf = null;
+        }

@@ -1,0 +1,42 @@
+extends ../layout
+block scripts
+    script(src="/javascripts/gcworking.js")
+block content
+    h1 #{title}: Watching the GC work.
+    p Look at the time spent by the GC.
+    p
+        button(onclick="start()") Start creating chunks
+    p
+        button(onclick="stop()") Stop!
+    hr
+    pre.
+        'use strict';
+
+        var intervalId = null, params;
+
+        function createChunks() {
+            var div, foo, i, str;
+            for (i = 0; i < 20; i++) {
+                div = document.createElement("div");
+                str = new Array(1000000).join('x');
+                foo = {
+                    str: str,
+                    div: div
+                };
+                div.foo = foo;
+            }
+        }
+
+        function start() {
+            if (intervalId) {
+                return;
+            }
+            intervalId = setInterval(createChunks, 1000);
+        }
+
+        function stop() {
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+            intervalId = null;
+        }
