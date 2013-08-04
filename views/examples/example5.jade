@@ -2,8 +2,10 @@ extends ../layout
 block scripts
     script(src="/javascripts/innerclasses.js")
 block content
-    h1 #{title}: Memory and inner classes
-    p If the compiler can use inner classes, your code will execute MUCH faster and will use MUCH LESS memory.
+    h1 #{title}: Memory and V8 hidden classes
+    p If the compiler can use hidden classes (
+        a(href="https://developers.google.com/v8/design") https://developers.google.com/v8/design
+        | ), your code will execute MUCH faster and will use MUCH LESS memory.
     ol
         li Create some objects
         li Take heap snapshot
