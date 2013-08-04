@@ -7,8 +7,8 @@
         graph,
         width = 800,
         height = 500,
-        color = d3.scale.category20(),
-        color2 = d3.scale.category20();
+        color = d3.scale.category20b(),
+        color2 = d3.scale.category10();
 
 
     function createArrowMarker(svg) {
@@ -37,7 +37,7 @@
 
     function nodeColor(node) {
         if (node.dominated) { return color2(2); }
-        if (node.dominator) { return color2(); }
+        if (node.dominator) { return color2(3); }
         return color(node.group);
     }
 

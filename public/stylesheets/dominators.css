@@ -1,8 +1,8 @@
 text {
 	font-size: 12px;
 	font-family: Arial;
-	text-shadow: 1px 1px 2px #fff;
-	fill: #000;
+	text-shadow: 1px 1px 2px #000;
+	fill: #fff;
 }
 
 .node {
